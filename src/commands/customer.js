@@ -4,6 +4,7 @@ import { handleError } from '../error.js';
 import { render } from '../output.js';
 import { fetchAllPages } from '../pagination.js';
 import { parseJsonFlag, kebabToCamel } from '../flag-utils.js';
+import { columns } from '../generated/columns.js';
 
 import { customer, customerNeeds, customerStatuses, customerTiers, customers } from '../generated/queries.js';
 import { customerCreate, customerDelete, customerMerge, customerUpdate, customerUpsert } from '../generated/mutations.js';
@@ -22,7 +23,7 @@ export function builder(yargs) {
       const variables = {};
       variables.id = argv.id;
       const result = await request(customer, variables);
-      render(result.customer, { json: argv.json });
+      render(result.customer, { json: argv.json, columnConfig: columns['Customer'] });
     } catch (err) {
       handleError(err);
     }
@@ -67,7 +68,7 @@ export function builder(yargs) {
         const result = await request(customerNeeds, variables);
         data = result.customerNeeds?.nodes || [];
       }
-      render(data, { json: argv.json, isList: true });
+      render(data, { json: argv.json, isList: true, columnConfig: columns['CustomerNeed'] });
     } catch (err) {
       handleError(err);
     }
@@ -108,7 +109,7 @@ export function builder(yargs) {
         const result = await request(customerStatuses, variables);
         data = result.customerStatuses?.nodes || [];
       }
-      render(data, { json: argv.json, isList: true });
+      render(data, { json: argv.json, isList: true, columnConfig: columns['CustomerStatus'] });
     } catch (err) {
       handleError(err);
     }
@@ -149,7 +150,7 @@ export function builder(yargs) {
         const result = await request(customerTiers, variables);
         data = result.customerTiers?.nodes || [];
       }
-      render(data, { json: argv.json, isList: true });
+      render(data, { json: argv.json, isList: true, columnConfig: columns['CustomerTier'] });
     } catch (err) {
       handleError(err);
     }
@@ -196,7 +197,7 @@ export function builder(yargs) {
         const result = await request(customers, variables);
         data = result.customers?.nodes || [];
       }
-      render(data, { json: argv.json, isList: true });
+      render(data, { json: argv.json, isList: true, columnConfig: columns['Customer'] });
     } catch (err) {
       handleError(err);
     }

@@ -4,6 +4,7 @@ import { handleError } from '../error.js';
 import { render } from '../output.js';
 import { fetchAllPages } from '../pagination.js';
 import { parseJsonFlag, kebabToCamel } from '../flag-utils.js';
+import { columns } from '../generated/columns.js';
 
 import { issueImportCheckCSV, issueImportCheckSync, issueImportJqlCheck } from '../generated/queries.js';
 import { issueImportCreateAsana, issueImportCreateCSVJira, issueImportCreateClubhouse, issueImportCreateGithub, issueImportCreateJira, issueImportCreateLinearV2, issueImportDelete, issueImportProcess, issueImportUpdate } from '../generated/mutations.js';
@@ -24,7 +25,7 @@ export function builder(yargs) {
       if (argv['csv-url'] !== undefined) variables.csvUrl = argv['csv-url'];
       if (argv['service'] !== undefined) variables.service = argv['service'];
       const result = await request(issueImportCheckCSV, variables);
-      render(result.issueImportCheckCSV, { json: argv.json });
+      render(result.issueImportCheckCSV, { json: argv.json, columnConfig: columns['IssueImportCheckPayload'] });
     } catch (err) {
       handleError(err);
     }
@@ -39,7 +40,7 @@ export function builder(yargs) {
       const variables = {};
       if (argv['issue-import-id'] !== undefined) variables.issueImportId = argv['issue-import-id'];
       const result = await request(issueImportCheckSync, variables);
-      render(result.issueImportCheckSync, { json: argv.json });
+      render(result.issueImportCheckSync, { json: argv.json, columnConfig: columns['IssueImportSyncCheckPayload'] });
     } catch (err) {
       handleError(err);
     }
@@ -62,7 +63,7 @@ export function builder(yargs) {
       if (argv['jira-token'] !== undefined) variables.jiraToken = argv['jira-token'];
       if (argv['jql'] !== undefined) variables.jql = argv['jql'];
       const result = await request(issueImportJqlCheck, variables);
-      render(result.issueImportJqlCheck, { json: argv.json });
+      render(result.issueImportJqlCheck, { json: argv.json, columnConfig: columns['IssueImportJqlCheckPayload'] });
     } catch (err) {
       handleError(err);
     }

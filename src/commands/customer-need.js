@@ -4,6 +4,7 @@ import { handleError } from '../error.js';
 import { render } from '../output.js';
 import { fetchAllPages } from '../pagination.js';
 import { parseJsonFlag, kebabToCamel } from '../flag-utils.js';
+import { columns } from '../generated/columns.js';
 
 import { customerNeed } from '../generated/queries.js';
 import { customerNeedArchive, customerNeedCreate, customerNeedCreateFromAttachment, customerNeedDelete, customerNeedUnarchive, customerNeedUpdate } from '../generated/mutations.js';
@@ -24,7 +25,7 @@ export function builder(yargs) {
       if (argv['hash'] !== undefined) variables.hash = argv['hash'];
       if (argv['id'] !== undefined) variables.id = argv['id'];
       const result = await request(customerNeed, variables);
-      render(result.customerNeed, { json: argv.json });
+      render(result.customerNeed, { json: argv.json, columnConfig: columns['CustomerNeed'] });
     } catch (err) {
       handleError(err);
     }

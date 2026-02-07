@@ -4,6 +4,7 @@ import { handleError } from '../error.js';
 import { render } from '../output.js';
 import { fetchAllPages } from '../pagination.js';
 import { parseJsonFlag, kebabToCamel } from '../flag-utils.js';
+import { columns } from '../generated/columns.js';
 
 import { archivedTeams, team, teamMemberships, teams } from '../generated/queries.js';
 import { teamCreate, teamDelete, teamUnarchive, teamUpdate } from '../generated/mutations.js';
@@ -20,7 +21,7 @@ export function builder(yargs) {
     try {
       const variables = {};
       const result = await request(archivedTeams, variables);
-      render(result.archivedTeams, { json: argv.json });
+      render(result.archivedTeams, { json: argv.json, columnConfig: columns['Team'] });
     } catch (err) {
       handleError(err);
     }
@@ -35,7 +36,7 @@ export function builder(yargs) {
       const variables = {};
       variables.id = argv.id;
       const result = await request(team, variables);
-      render(result.team, { json: argv.json });
+      render(result.team, { json: argv.json, columnConfig: columns['Team'] });
     } catch (err) {
       handleError(err);
     }
@@ -76,7 +77,7 @@ export function builder(yargs) {
         const result = await request(teamMemberships, variables);
         data = result.teamMemberships?.nodes || [];
       }
-      render(data, { json: argv.json, isList: true });
+      render(data, { json: argv.json, isList: true, columnConfig: columns['TeamMembership'] });
     } catch (err) {
       handleError(err);
     }
@@ -121,7 +122,7 @@ export function builder(yargs) {
         const result = await request(teams, variables);
         data = result.teams?.nodes || [];
       }
-      render(data, { json: argv.json, isList: true });
+      render(data, { json: argv.json, isList: true, columnConfig: columns['Team'] });
     } catch (err) {
       handleError(err);
     }

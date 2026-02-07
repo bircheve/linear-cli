@@ -4,6 +4,7 @@ import { handleError } from '../error.js';
 import { render } from '../output.js';
 import { fetchAllPages } from '../pagination.js';
 import { parseJsonFlag, kebabToCamel } from '../flag-utils.js';
+import { columns } from '../generated/columns.js';
 
 import { projectStatusProjectCount } from '../generated/queries.js';
 
@@ -21,7 +22,7 @@ export function builder(yargs) {
       const variables = {};
       variables.id = argv.id;
       const result = await request(projectStatusProjectCount, variables);
-      render(result.projectStatusProjectCount, { json: argv.json });
+      render(result.projectStatusProjectCount, { json: argv.json, columnConfig: columns['ProjectStatusCountPayload'] });
     } catch (err) {
       handleError(err);
     }

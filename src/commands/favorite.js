@@ -4,6 +4,7 @@ import { handleError } from '../error.js';
 import { render } from '../output.js';
 import { fetchAllPages } from '../pagination.js';
 import { parseJsonFlag, kebabToCamel } from '../flag-utils.js';
+import { columns } from '../generated/columns.js';
 
 import { favorite, favorites } from '../generated/queries.js';
 import { favoriteCreate, favoriteDelete, favoriteUpdate } from '../generated/mutations.js';
@@ -22,7 +23,7 @@ export function builder(yargs) {
       const variables = {};
       variables.id = argv.id;
       const result = await request(favorite, variables);
-      render(result.favorite, { json: argv.json });
+      render(result.favorite, { json: argv.json, columnConfig: columns['Favorite'] });
     } catch (err) {
       handleError(err);
     }
@@ -63,7 +64,7 @@ export function builder(yargs) {
         const result = await request(favorites, variables);
         data = result.favorites?.nodes || [];
       }
-      render(data, { json: argv.json, isList: true });
+      render(data, { json: argv.json, isList: true, columnConfig: columns['Favorite'] });
     } catch (err) {
       handleError(err);
     }

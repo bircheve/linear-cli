@@ -4,6 +4,7 @@ import { handleError } from '../error.js';
 import { render } from '../output.js';
 import { fetchAllPages } from '../pagination.js';
 import { parseJsonFlag, kebabToCamel } from '../flag-utils.js';
+import { columns } from '../generated/columns.js';
 
 import { notificationSubscription } from '../generated/queries.js';
 import { notificationSubscriptionCreate, notificationSubscriptionDelete, notificationSubscriptionUpdate } from '../generated/mutations.js';
@@ -22,7 +23,7 @@ export function builder(yargs) {
       const variables = {};
       variables.id = argv.id;
       const result = await request(notificationSubscription, variables);
-      render(result.notificationSubscription, { json: argv.json });
+      render(result.notificationSubscription, { json: argv.json, columnConfig: columns['NotificationSubscription'] });
     } catch (err) {
       handleError(err);
     }

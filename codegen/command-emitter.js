@@ -40,6 +40,7 @@ function generateGroupFile(group, ir) {
   lines.push("import { render } from '../output.js';");
   lines.push("import { fetchAllPages } from '../pagination.js';");
   lines.push("import { parseJsonFlag, kebabToCamel } from '../flag-utils.js';");
+  lines.push("import { columns } from '../generated/columns.js';");
   lines.push('');
 
   // Import queries and mutations, aliasing conflicts
@@ -223,7 +224,8 @@ function generateSubcommand(cmd, ir, localName) {
     lines.push(`      const result = await request(${localName}, variables);`);
     lines.push(`      data = result.${cmd.name}?.nodes || [];`);
     lines.push('    }');
-    lines.push(`    render(data, { json: argv.json, isList: true });`);
+    const nodeType = getNodeTypeFromConnection(cmd.typeName);
+    lines.push(`    render(data, { json: argv.json, isList: true, columnConfig: columns['${nodeType}'] });`);
   } else if (isQuery) {
     // Get/single query handler
     lines.push('    const variables = {};');
@@ -235,7 +237,7 @@ function generateSubcommand(cmd, ir, localName) {
       lines.push(`    if (argv['${camelToKebab(camel)}'] !== undefined) variables.${camel} = argv['${camelToKebab(camel)}'];`);
     }
     lines.push(`    const result = await request(${localName}, variables);`);
-    lines.push(`    render(result.${cmd.name}, { json: argv.json });`);
+    lines.push(`    render(result.${cmd.name}, { json: argv.json, columnConfig: columns['${cmd.typeName}'] });`);
   } else {
     // Mutation handler
     lines.push('    const variables = {};');

@@ -4,6 +4,7 @@ import { handleError } from '../error.js';
 import { render } from '../output.js';
 import { fetchAllPages } from '../pagination.js';
 import { parseJsonFlag, kebabToCamel } from '../flag-utils.js';
+import { columns } from '../generated/columns.js';
 
 import { attachment, attachmentIssue, attachmentSources, attachments } from '../generated/queries.js';
 import { attachmentCreate, attachmentDelete, attachmentLinkDiscord, attachmentLinkFront, attachmentLinkGitHubIssue, attachmentLinkGitHubPR, attachmentLinkGitLabMR, attachmentLinkIntercom, attachmentLinkJiraIssue, attachmentLinkSalesforce, attachmentLinkSlack, attachmentLinkURL, attachmentLinkZendesk, attachmentSyncToSlack, attachmentUpdate } from '../generated/mutations.js';
@@ -22,7 +23,7 @@ export function builder(yargs) {
       const variables = {};
       variables.id = argv.id;
       const result = await request(attachment, variables);
-      render(result.attachment, { json: argv.json });
+      render(result.attachment, { json: argv.json, columnConfig: columns['Attachment'] });
     } catch (err) {
       handleError(err);
     }
@@ -37,7 +38,7 @@ export function builder(yargs) {
       const variables = {};
       variables.id = argv.id;
       const result = await request(attachmentIssue, variables);
-      render(result.attachmentIssue, { json: argv.json });
+      render(result.attachmentIssue, { json: argv.json, columnConfig: columns['Issue'] });
     } catch (err) {
       handleError(err);
     }
@@ -52,7 +53,7 @@ export function builder(yargs) {
       const variables = {};
       if (argv['team-id'] !== undefined) variables.teamId = argv['team-id'];
       const result = await request(attachmentSources, variables);
-      render(result.attachmentSources, { json: argv.json });
+      render(result.attachmentSources, { json: argv.json, columnConfig: columns['AttachmentSourcesPayload'] });
     } catch (err) {
       handleError(err);
     }
@@ -97,7 +98,7 @@ export function builder(yargs) {
         const result = await request(attachments, variables);
         data = result.attachments?.nodes || [];
       }
-      render(data, { json: argv.json, isList: true });
+      render(data, { json: argv.json, isList: true, columnConfig: columns['Attachment'] });
     } catch (err) {
       handleError(err);
     }

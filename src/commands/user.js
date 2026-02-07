@@ -4,6 +4,7 @@ import { handleError } from '../error.js';
 import { render } from '../output.js';
 import { fetchAllPages } from '../pagination.js';
 import { parseJsonFlag, kebabToCamel } from '../flag-utils.js';
+import { columns } from '../generated/columns.js';
 
 import { availableUsers, user, users, viewer } from '../generated/queries.js';
 import { userDemoteAdmin, userDemoteMember, userDiscordConnect, userExternalUserDisconnect, userPromoteAdmin, userPromoteMember, userSuspend, userUnlinkFromIdentityProvider, userUnsuspend, userUpdate } from '../generated/mutations.js';
@@ -20,7 +21,7 @@ export function builder(yargs) {
     try {
       const variables = {};
       const result = await request(availableUsers, variables);
-      render(result.availableUsers, { json: argv.json });
+      render(result.availableUsers, { json: argv.json, columnConfig: columns['AuthResolverResponse'] });
     } catch (err) {
       handleError(err);
     }
@@ -35,7 +36,7 @@ export function builder(yargs) {
       const variables = {};
       variables.id = argv.id;
       const result = await request(user, variables);
-      render(result.user, { json: argv.json });
+      render(result.user, { json: argv.json, columnConfig: columns['User'] });
     } catch (err) {
       handleError(err);
     }
@@ -84,7 +85,7 @@ export function builder(yargs) {
         const result = await request(users, variables);
         data = result.users?.nodes || [];
       }
-      render(data, { json: argv.json, isList: true });
+      render(data, { json: argv.json, isList: true, columnConfig: columns['User'] });
     } catch (err) {
       handleError(err);
     }
@@ -97,7 +98,7 @@ export function builder(yargs) {
     try {
       const variables = {};
       const result = await request(viewer, variables);
-      render(result.viewer, { json: argv.json });
+      render(result.viewer, { json: argv.json, columnConfig: columns['User'] });
     } catch (err) {
       handleError(err);
     }

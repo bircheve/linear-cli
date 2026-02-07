@@ -4,6 +4,7 @@ import { handleError } from '../error.js';
 import { render } from '../output.js';
 import { fetchAllPages } from '../pagination.js';
 import { parseJsonFlag, kebabToCamel } from '../flag-utils.js';
+import { columns } from '../generated/columns.js';
 
 import { emoji, emojis } from '../generated/queries.js';
 import { emojiCreate, emojiDelete } from '../generated/mutations.js';
@@ -22,7 +23,7 @@ export function builder(yargs) {
       const variables = {};
       variables.id = argv.id;
       const result = await request(emoji, variables);
-      render(result.emoji, { json: argv.json });
+      render(result.emoji, { json: argv.json, columnConfig: columns['Emoji'] });
     } catch (err) {
       handleError(err);
     }
@@ -63,7 +64,7 @@ export function builder(yargs) {
         const result = await request(emojis, variables);
         data = result.emojis?.nodes || [];
       }
-      render(data, { json: argv.json, isList: true });
+      render(data, { json: argv.json, isList: true, columnConfig: columns['Emoji'] });
     } catch (err) {
       handleError(err);
     }

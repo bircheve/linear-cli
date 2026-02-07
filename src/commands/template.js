@@ -4,6 +4,7 @@ import { handleError } from '../error.js';
 import { render } from '../output.js';
 import { fetchAllPages } from '../pagination.js';
 import { parseJsonFlag, kebabToCamel } from '../flag-utils.js';
+import { columns } from '../generated/columns.js';
 
 import { template, templates } from '../generated/queries.js';
 import { templateCreate, templateDelete, templateUpdate } from '../generated/mutations.js';
@@ -22,7 +23,7 @@ export function builder(yargs) {
       const variables = {};
       variables.id = argv.id;
       const result = await request(template, variables);
-      render(result.template, { json: argv.json });
+      render(result.template, { json: argv.json, columnConfig: columns['Template'] });
     } catch (err) {
       handleError(err);
     }
@@ -35,7 +36,7 @@ export function builder(yargs) {
     try {
       const variables = {};
       const result = await request(templates, variables);
-      render(result.templates, { json: argv.json });
+      render(result.templates, { json: argv.json, columnConfig: columns['Template'] });
     } catch (err) {
       handleError(err);
     }

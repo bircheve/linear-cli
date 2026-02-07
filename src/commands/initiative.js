@@ -4,6 +4,7 @@ import { handleError } from '../error.js';
 import { render } from '../output.js';
 import { fetchAllPages } from '../pagination.js';
 import { parseJsonFlag, kebabToCamel } from '../flag-utils.js';
+import { columns } from '../generated/columns.js';
 
 import { initiative, initiativeRelations, initiativeToProjects, initiativeUpdates, initiatives } from '../generated/queries.js';
 import { initiativeArchive, initiativeCreate, initiativeDelete, initiativeUnarchive } from '../generated/mutations.js';
@@ -22,7 +23,7 @@ export function builder(yargs) {
       const variables = {};
       variables.id = argv.id;
       const result = await request(initiative, variables);
-      render(result.initiative, { json: argv.json });
+      render(result.initiative, { json: argv.json, columnConfig: columns['Initiative'] });
     } catch (err) {
       handleError(err);
     }
@@ -63,7 +64,7 @@ export function builder(yargs) {
         const result = await request(initiativeRelations, variables);
         data = result.initiativeRelations?.nodes || [];
       }
-      render(data, { json: argv.json, isList: true });
+      render(data, { json: argv.json, isList: true, columnConfig: columns['InitiativeRelation'] });
     } catch (err) {
       handleError(err);
     }
@@ -104,7 +105,7 @@ export function builder(yargs) {
         const result = await request(initiativeToProjects, variables);
         data = result.initiativeToProjects?.nodes || [];
       }
-      render(data, { json: argv.json, isList: true });
+      render(data, { json: argv.json, isList: true, columnConfig: columns['InitiativeToProject'] });
     } catch (err) {
       handleError(err);
     }
@@ -149,7 +150,7 @@ export function builder(yargs) {
         const result = await request(initiativeUpdates, variables);
         data = result.initiativeUpdates?.nodes || [];
       }
-      render(data, { json: argv.json, isList: true });
+      render(data, { json: argv.json, isList: true, columnConfig: columns['InitiativeUpdate'] });
     } catch (err) {
       handleError(err);
     }
@@ -196,7 +197,7 @@ export function builder(yargs) {
         const result = await request(initiatives, variables);
         data = result.initiatives?.nodes || [];
       }
-      render(data, { json: argv.json, isList: true });
+      render(data, { json: argv.json, isList: true, columnConfig: columns['Initiative'] });
     } catch (err) {
       handleError(err);
     }

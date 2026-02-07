@@ -4,6 +4,7 @@ import { handleError } from '../error.js';
 import { render } from '../output.js';
 import { fetchAllPages } from '../pagination.js';
 import { parseJsonFlag, kebabToCamel } from '../flag-utils.js';
+import { columns } from '../generated/columns.js';
 
 import { project, projectFilterSuggestion, projectLabels, projectMilestones, projectRelations, projectStatuses, projectUpdates, projects } from '../generated/queries.js';
 import { projectAddLabel, projectArchive, projectCreate, projectDelete, projectReassignStatus, projectRemoveLabel, projectUnarchive } from '../generated/mutations.js';
@@ -22,7 +23,7 @@ export function builder(yargs) {
       const variables = {};
       variables.id = argv.id;
       const result = await request(project, variables);
-      render(result.project, { json: argv.json });
+      render(result.project, { json: argv.json, columnConfig: columns['Project'] });
     } catch (err) {
       handleError(err);
     }
@@ -37,7 +38,7 @@ export function builder(yargs) {
       const variables = {};
       if (argv['prompt'] !== undefined) variables.prompt = argv['prompt'];
       const result = await request(projectFilterSuggestion, variables);
-      render(result.projectFilterSuggestion, { json: argv.json });
+      render(result.projectFilterSuggestion, { json: argv.json, columnConfig: columns['ProjectFilterSuggestionPayload'] });
     } catch (err) {
       handleError(err);
     }
@@ -82,7 +83,7 @@ export function builder(yargs) {
         const result = await request(projectLabels, variables);
         data = result.projectLabels?.nodes || [];
       }
-      render(data, { json: argv.json, isList: true });
+      render(data, { json: argv.json, isList: true, columnConfig: columns['ProjectLabel'] });
     } catch (err) {
       handleError(err);
     }
@@ -127,7 +128,7 @@ export function builder(yargs) {
         const result = await request(projectMilestones, variables);
         data = result.projectMilestones?.nodes || [];
       }
-      render(data, { json: argv.json, isList: true });
+      render(data, { json: argv.json, isList: true, columnConfig: columns['ProjectMilestone'] });
     } catch (err) {
       handleError(err);
     }
@@ -168,7 +169,7 @@ export function builder(yargs) {
         const result = await request(projectRelations, variables);
         data = result.projectRelations?.nodes || [];
       }
-      render(data, { json: argv.json, isList: true });
+      render(data, { json: argv.json, isList: true, columnConfig: columns['ProjectRelation'] });
     } catch (err) {
       handleError(err);
     }
@@ -209,7 +210,7 @@ export function builder(yargs) {
         const result = await request(projectStatuses, variables);
         data = result.projectStatuses?.nodes || [];
       }
-      render(data, { json: argv.json, isList: true });
+      render(data, { json: argv.json, isList: true, columnConfig: columns['ProjectStatus'] });
     } catch (err) {
       handleError(err);
     }
@@ -254,7 +255,7 @@ export function builder(yargs) {
         const result = await request(projectUpdates, variables);
         data = result.projectUpdates?.nodes || [];
       }
-      render(data, { json: argv.json, isList: true });
+      render(data, { json: argv.json, isList: true, columnConfig: columns['ProjectUpdate'] });
     } catch (err) {
       handleError(err);
     }
@@ -301,7 +302,7 @@ export function builder(yargs) {
         const result = await request(projects, variables);
         data = result.projects?.nodes || [];
       }
-      render(data, { json: argv.json, isList: true });
+      render(data, { json: argv.json, isList: true, columnConfig: columns['Project'] });
     } catch (err) {
       handleError(err);
     }

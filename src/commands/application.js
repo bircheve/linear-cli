@@ -4,6 +4,7 @@ import { handleError } from '../error.js';
 import { render } from '../output.js';
 import { fetchAllPages } from '../pagination.js';
 import { parseJsonFlag, kebabToCamel } from '../flag-utils.js';
+import { columns } from '../generated/columns.js';
 
 import { applicationInfo, applicationInfoByIds, applicationWithAuthorization } from '../generated/queries.js';
 
@@ -21,7 +22,7 @@ export function builder(yargs) {
       const variables = {};
       if (argv['client-id'] !== undefined) variables.clientId = argv['client-id'];
       const result = await request(applicationInfo, variables);
-      render(result.applicationInfo, { json: argv.json });
+      render(result.applicationInfo, { json: argv.json, columnConfig: columns['Application'] });
     } catch (err) {
       handleError(err);
     }
@@ -36,7 +37,7 @@ export function builder(yargs) {
       const variables = {};
       if (argv['ids'] !== undefined) variables.ids = argv['ids'];
       const result = await request(applicationInfoByIds, variables);
-      render(result.applicationInfoByIds, { json: argv.json });
+      render(result.applicationInfoByIds, { json: argv.json, columnConfig: columns['Application'] });
     } catch (err) {
       handleError(err);
     }
@@ -57,7 +58,7 @@ export function builder(yargs) {
       if (argv['redirect-uri'] !== undefined) variables.redirectUri = argv['redirect-uri'];
       if (argv['scope'] !== undefined) variables.scope = argv['scope'];
       const result = await request(applicationWithAuthorization, variables);
-      render(result.applicationWithAuthorization, { json: argv.json });
+      render(result.applicationWithAuthorization, { json: argv.json, columnConfig: columns['UserAuthorizedApplication'] });
     } catch (err) {
       handleError(err);
     }

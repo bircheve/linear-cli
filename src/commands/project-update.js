@@ -4,6 +4,7 @@ import { handleError } from '../error.js';
 import { render } from '../output.js';
 import { fetchAllPages } from '../pagination.js';
 import { parseJsonFlag, kebabToCamel } from '../flag-utils.js';
+import { columns } from '../generated/columns.js';
 
 import { projectUpdate as projectUpdateQuery } from '../generated/queries.js';
 import { projectUpdate as projectUpdateMutation, projectUpdateArchive, projectUpdateCreate, projectUpdateDelete, projectUpdateUnarchive, projectUpdateUpdate } from '../generated/mutations.js';
@@ -22,7 +23,7 @@ export function builder(yargs) {
       const variables = {};
       variables.id = argv.id;
       const result = await request(projectUpdateQuery, variables);
-      render(result.projectUpdate, { json: argv.json });
+      render(result.projectUpdate, { json: argv.json, columnConfig: columns['ProjectUpdate'] });
     } catch (err) {
       handleError(err);
     }

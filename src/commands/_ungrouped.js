@@ -4,6 +4,7 @@ import { handleError } from '../error.js';
 import { render } from '../output.js';
 import { fetchAllPages } from '../pagination.js';
 import { parseJsonFlag, kebabToCamel } from '../flag-utils.js';
+import { columns } from '../generated/columns.js';
 
 import { administrableTeams, agentActivities, attachmentsForURL, auditEntries, auditEntryTypes, authorizedApplications, failuresForOauthWebhooks, fetchData, notificationsUnreadCount, searchDocuments, searchIssues, searchProjects, semanticSearch, summarizeProjectUpdates, templatesForIntegration, triageResponsibilities, verifyGitHubEnterpriseServerInstallation, workspaceAuthorizedApplication, workspaceAuthorizedApplicationsWithAppUser } from '../generated/queries.js';
 import { airbyteIntegrationConnect, createInitiativeUpdateReminder, createProjectUpdateReminder, emailTokenUserAccountAuth, emailUnsubscribe, emailUserAccountAuthChallenge, jiraIntegrationConnect, logoutAllSessions, passkeyLoginFinish, passkeyLoginStart, refreshGoogleSheetsData, resendOrganizationInvite, resendOrganizationInviteByEmail, samlTokenUserAccountAuth, updateIntegrationSlackScopes, updateIssueSummary } from '../generated/mutations.js';
@@ -52,7 +53,7 @@ export function builder(yargs) {
         const result = await request(administrableTeams, variables);
         data = result.administrableTeams?.nodes || [];
       }
-      render(data, { json: argv.json, isList: true });
+      render(data, { json: argv.json, isList: true, columnConfig: columns['Team'] });
     } catch (err) {
       handleError(err);
     }
@@ -97,7 +98,7 @@ export function builder(yargs) {
         const result = await request(agentActivities, variables);
         data = result.agentActivities?.nodes || [];
       }
-      render(data, { json: argv.json, isList: true });
+      render(data, { json: argv.json, isList: true, columnConfig: columns['AgentActivity'] });
     } catch (err) {
       handleError(err);
     }
@@ -140,7 +141,7 @@ export function builder(yargs) {
         const result = await request(attachmentsForURL, variables);
         data = result.attachmentsForURL?.nodes || [];
       }
-      render(data, { json: argv.json, isList: true });
+      render(data, { json: argv.json, isList: true, columnConfig: columns['Attachment'] });
     } catch (err) {
       handleError(err);
     }
@@ -185,7 +186,7 @@ export function builder(yargs) {
         const result = await request(auditEntries, variables);
         data = result.auditEntries?.nodes || [];
       }
-      render(data, { json: argv.json, isList: true });
+      render(data, { json: argv.json, isList: true, columnConfig: columns['AuditEntry'] });
     } catch (err) {
       handleError(err);
     }
@@ -198,7 +199,7 @@ export function builder(yargs) {
     try {
       const variables = {};
       const result = await request(auditEntryTypes, variables);
-      render(result.auditEntryTypes, { json: argv.json });
+      render(result.auditEntryTypes, { json: argv.json, columnConfig: columns['AuditEntryType'] });
     } catch (err) {
       handleError(err);
     }
@@ -211,7 +212,7 @@ export function builder(yargs) {
     try {
       const variables = {};
       const result = await request(authorizedApplications, variables);
-      render(result.authorizedApplications, { json: argv.json });
+      render(result.authorizedApplications, { json: argv.json, columnConfig: columns['AuthorizedApplication'] });
     } catch (err) {
       handleError(err);
     }
@@ -226,7 +227,7 @@ export function builder(yargs) {
       const variables = {};
       if (argv['oauth-client-id'] !== undefined) variables.oauthClientId = argv['oauth-client-id'];
       const result = await request(failuresForOauthWebhooks, variables);
-      render(result.failuresForOauthWebhooks, { json: argv.json });
+      render(result.failuresForOauthWebhooks, { json: argv.json, columnConfig: columns['WebhookFailureEvent'] });
     } catch (err) {
       handleError(err);
     }
@@ -241,7 +242,7 @@ export function builder(yargs) {
       const variables = {};
       if (argv['query'] !== undefined) variables.query = argv['query'];
       const result = await request(fetchData, variables);
-      render(result.fetchData, { json: argv.json });
+      render(result.fetchData, { json: argv.json, columnConfig: columns['FetchDataPayload'] });
     } catch (err) {
       handleError(err);
     }
@@ -254,7 +255,7 @@ export function builder(yargs) {
     try {
       const variables = {};
       const result = await request(notificationsUnreadCount, variables);
-      render(result.notificationsUnreadCount, { json: argv.json });
+      render(result.notificationsUnreadCount, { json: argv.json, columnConfig: columns['Int'] });
     } catch (err) {
       handleError(err);
     }
@@ -287,7 +288,7 @@ export function builder(yargs) {
       if (argv['team-id'] !== undefined) variables.teamId = argv['team-id'];
       if (argv['term'] !== undefined) variables.term = argv['term'];
       const result = await request(searchDocuments, variables);
-      render(result.searchDocuments, { json: argv.json });
+      render(result.searchDocuments, { json: argv.json, columnConfig: columns['DocumentSearchPayload'] });
     } catch (err) {
       handleError(err);
     }
@@ -323,7 +324,7 @@ export function builder(yargs) {
       if (argv['team-id'] !== undefined) variables.teamId = argv['team-id'];
       if (argv['term'] !== undefined) variables.term = argv['term'];
       const result = await request(searchIssues, variables);
-      render(result.searchIssues, { json: argv.json });
+      render(result.searchIssues, { json: argv.json, columnConfig: columns['IssueSearchPayload'] });
     } catch (err) {
       handleError(err);
     }
@@ -356,7 +357,7 @@ export function builder(yargs) {
       if (argv['team-id'] !== undefined) variables.teamId = argv['team-id'];
       if (argv['term'] !== undefined) variables.term = argv['term'];
       const result = await request(searchProjects, variables);
-      render(result.searchProjects, { json: argv.json });
+      render(result.searchProjects, { json: argv.json, columnConfig: columns['ProjectSearchPayload'] });
     } catch (err) {
       handleError(err);
     }
@@ -377,7 +378,7 @@ export function builder(yargs) {
       if (argv['query'] !== undefined) variables.query = argv['query'];
       if (argv['types'] !== undefined) variables.types = argv['types'];
       const result = await request(semanticSearch, variables);
-      render(result.semanticSearch, { json: argv.json });
+      render(result.semanticSearch, { json: argv.json, columnConfig: columns['SemanticSearchPayload'] });
     } catch (err) {
       handleError(err);
     }
@@ -392,7 +393,7 @@ export function builder(yargs) {
       const variables = {};
       if (argv['ids'] !== undefined) variables.ids = argv['ids'];
       const result = await request(summarizeProjectUpdates, variables);
-      render(result.summarizeProjectUpdates, { json: argv.json });
+      render(result.summarizeProjectUpdates, { json: argv.json, columnConfig: columns['SummaryPayload'] });
     } catch (err) {
       handleError(err);
     }
@@ -407,7 +408,7 @@ export function builder(yargs) {
       const variables = {};
       if (argv['integration-type'] !== undefined) variables.integrationType = argv['integration-type'];
       const result = await request(templatesForIntegration, variables);
-      render(result.templatesForIntegration, { json: argv.json });
+      render(result.templatesForIntegration, { json: argv.json, columnConfig: columns['Template'] });
     } catch (err) {
       handleError(err);
     }
@@ -448,7 +449,7 @@ export function builder(yargs) {
         const result = await request(triageResponsibilities, variables);
         data = result.triageResponsibilities?.nodes || [];
       }
-      render(data, { json: argv.json, isList: true });
+      render(data, { json: argv.json, isList: true, columnConfig: columns['TriageResponsibility'] });
     } catch (err) {
       handleError(err);
     }
@@ -463,7 +464,7 @@ export function builder(yargs) {
       const variables = {};
       if (argv['integration-id'] !== undefined) variables.integrationId = argv['integration-id'];
       const result = await request(verifyGitHubEnterpriseServerInstallation, variables);
-      render(result.verifyGitHubEnterpriseServerInstallation, { json: argv.json });
+      render(result.verifyGitHubEnterpriseServerInstallation, { json: argv.json, columnConfig: columns['GitHubEnterpriseServerInstallVerificationPayload'] });
     } catch (err) {
       handleError(err);
     }
@@ -478,7 +479,7 @@ export function builder(yargs) {
       const variables = {};
       if (argv['client-id'] !== undefined) variables.clientId = argv['client-id'];
       const result = await request(workspaceAuthorizedApplication, variables);
-      render(result.workspaceAuthorizedApplication, { json: argv.json });
+      render(result.workspaceAuthorizedApplication, { json: argv.json, columnConfig: columns['WorkspaceAuthorizedApplicationWithMemberships'] });
     } catch (err) {
       handleError(err);
     }
@@ -493,7 +494,7 @@ export function builder(yargs) {
       const variables = {};
       if (argv['client-ids'] !== undefined) variables.clientIds = argv['client-ids'];
       const result = await request(workspaceAuthorizedApplicationsWithAppUser, variables);
-      render(result.workspaceAuthorizedApplicationsWithAppUser, { json: argv.json });
+      render(result.workspaceAuthorizedApplicationsWithAppUser, { json: argv.json, columnConfig: columns['WorkspaceAuthorizedApplicationWithAppUser'] });
     } catch (err) {
       handleError(err);
     }

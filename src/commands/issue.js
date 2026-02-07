@@ -4,6 +4,7 @@ import { handleError } from '../error.js';
 import { render } from '../output.js';
 import { fetchAllPages } from '../pagination.js';
 import { parseJsonFlag, kebabToCamel } from '../flag-utils.js';
+import { columns } from '../generated/columns.js';
 
 import { issue, issueFigmaFileKeySearch, issueFilterSuggestion, issueLabels, issuePriorityValues, issueRelations, issueSearch, issueTitleSuggestionFromCustomerRequest, issueVcsBranchSearch, issues } from '../generated/queries.js';
 import { issueAddLabel, issueArchive, issueCreate, issueDelete, issueDescriptionUpdateFromFront, issueReminder, issueRemoveLabel, issueSubscribe, issueUnarchive, issueUnsubscribe, issueUpdate } from '../generated/mutations.js';
@@ -22,7 +23,7 @@ export function builder(yargs) {
       const variables = {};
       variables.id = argv.id;
       const result = await request(issue, variables);
-      render(result.issue, { json: argv.json });
+      render(result.issue, { json: argv.json, columnConfig: columns['Issue'] });
     } catch (err) {
       handleError(err);
     }
@@ -65,7 +66,7 @@ export function builder(yargs) {
         const result = await request(issueFigmaFileKeySearch, variables);
         data = result.issueFigmaFileKeySearch?.nodes || [];
       }
-      render(data, { json: argv.json, isList: true });
+      render(data, { json: argv.json, isList: true, columnConfig: columns['Issue'] });
     } catch (err) {
       handleError(err);
     }
@@ -82,7 +83,7 @@ export function builder(yargs) {
       if (argv['project-id'] !== undefined) variables.projectId = argv['project-id'];
       if (argv['prompt'] !== undefined) variables.prompt = argv['prompt'];
       const result = await request(issueFilterSuggestion, variables);
-      render(result.issueFilterSuggestion, { json: argv.json });
+      render(result.issueFilterSuggestion, { json: argv.json, columnConfig: columns['IssueFilterSuggestionPayload'] });
     } catch (err) {
       handleError(err);
     }
@@ -127,7 +128,7 @@ export function builder(yargs) {
         const result = await request(issueLabels, variables);
         data = result.issueLabels?.nodes || [];
       }
-      render(data, { json: argv.json, isList: true });
+      render(data, { json: argv.json, isList: true, columnConfig: columns['IssueLabel'] });
     } catch (err) {
       handleError(err);
     }
@@ -140,7 +141,7 @@ export function builder(yargs) {
     try {
       const variables = {};
       const result = await request(issuePriorityValues, variables);
-      render(result.issuePriorityValues, { json: argv.json });
+      render(result.issuePriorityValues, { json: argv.json, columnConfig: columns['IssuePriorityValue'] });
     } catch (err) {
       handleError(err);
     }
@@ -181,7 +182,7 @@ export function builder(yargs) {
         const result = await request(issueRelations, variables);
         data = result.issueRelations?.nodes || [];
       }
-      render(data, { json: argv.json, isList: true });
+      render(data, { json: argv.json, isList: true, columnConfig: columns['IssueRelation'] });
     } catch (err) {
       handleError(err);
     }
@@ -228,7 +229,7 @@ export function builder(yargs) {
         const result = await request(issueSearch, variables);
         data = result.issueSearch?.nodes || [];
       }
-      render(data, { json: argv.json, isList: true });
+      render(data, { json: argv.json, isList: true, columnConfig: columns['Issue'] });
     } catch (err) {
       handleError(err);
     }
@@ -243,7 +244,7 @@ export function builder(yargs) {
       const variables = {};
       if (argv['request'] !== undefined) variables.request = argv['request'];
       const result = await request(issueTitleSuggestionFromCustomerRequest, variables);
-      render(result.issueTitleSuggestionFromCustomerRequest, { json: argv.json });
+      render(result.issueTitleSuggestionFromCustomerRequest, { json: argv.json, columnConfig: columns['IssueTitleSuggestionFromCustomerRequestPayload'] });
     } catch (err) {
       handleError(err);
     }
@@ -258,7 +259,7 @@ export function builder(yargs) {
       const variables = {};
       if (argv['branch-name'] !== undefined) variables.branchName = argv['branch-name'];
       const result = await request(issueVcsBranchSearch, variables);
-      render(result.issueVcsBranchSearch, { json: argv.json });
+      render(result.issueVcsBranchSearch, { json: argv.json, columnConfig: columns['Issue'] });
     } catch (err) {
       handleError(err);
     }
@@ -305,7 +306,7 @@ export function builder(yargs) {
         const result = await request(issues, variables);
         data = result.issues?.nodes || [];
       }
-      render(data, { json: argv.json, isList: true });
+      render(data, { json: argv.json, isList: true, columnConfig: columns['Issue'] });
     } catch (err) {
       handleError(err);
     }

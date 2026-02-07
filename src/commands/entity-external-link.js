@@ -4,6 +4,7 @@ import { handleError } from '../error.js';
 import { render } from '../output.js';
 import { fetchAllPages } from '../pagination.js';
 import { parseJsonFlag, kebabToCamel } from '../flag-utils.js';
+import { columns } from '../generated/columns.js';
 
 import { entityExternalLink } from '../generated/queries.js';
 import { entityExternalLinkCreate, entityExternalLinkDelete, entityExternalLinkUpdate } from '../generated/mutations.js';
@@ -22,7 +23,7 @@ export function builder(yargs) {
       const variables = {};
       variables.id = argv.id;
       const result = await request(entityExternalLink, variables);
-      render(result.entityExternalLink, { json: argv.json });
+      render(result.entityExternalLink, { json: argv.json, columnConfig: columns['EntityExternalLink'] });
     } catch (err) {
       handleError(err);
     }

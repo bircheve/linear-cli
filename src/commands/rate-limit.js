@@ -4,6 +4,7 @@ import { handleError } from '../error.js';
 import { render } from '../output.js';
 import { fetchAllPages } from '../pagination.js';
 import { parseJsonFlag, kebabToCamel } from '../flag-utils.js';
+import { columns } from '../generated/columns.js';
 
 import { rateLimitStatus } from '../generated/queries.js';
 
@@ -19,7 +20,7 @@ export function builder(yargs) {
     try {
       const variables = {};
       const result = await request(rateLimitStatus, variables);
-      render(result.rateLimitStatus, { json: argv.json });
+      render(result.rateLimitStatus, { json: argv.json, columnConfig: columns['RateLimitPayload'] });
     } catch (err) {
       handleError(err);
     }

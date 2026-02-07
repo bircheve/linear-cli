@@ -4,6 +4,7 @@ import { handleError } from '../error.js';
 import { render } from '../output.js';
 import { fetchAllPages } from '../pagination.js';
 import { parseJsonFlag, kebabToCamel } from '../flag-utils.js';
+import { columns } from '../generated/columns.js';
 
 import { workflowState, workflowStates } from '../generated/queries.js';
 import { workflowStateArchive, workflowStateCreate, workflowStateUpdate } from '../generated/mutations.js';
@@ -22,7 +23,7 @@ export function builder(yargs) {
       const variables = {};
       variables.id = argv.id;
       const result = await request(workflowState, variables);
-      render(result.workflowState, { json: argv.json });
+      render(result.workflowState, { json: argv.json, columnConfig: columns['WorkflowState'] });
     } catch (err) {
       handleError(err);
     }
@@ -67,7 +68,7 @@ export function builder(yargs) {
         const result = await request(workflowStates, variables);
         data = result.workflowStates?.nodes || [];
       }
-      render(data, { json: argv.json, isList: true });
+      render(data, { json: argv.json, isList: true, columnConfig: columns['WorkflowState'] });
     } catch (err) {
       handleError(err);
     }

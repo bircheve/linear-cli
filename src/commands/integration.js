@@ -4,6 +4,7 @@ import { handleError } from '../error.js';
 import { render } from '../output.js';
 import { fetchAllPages } from '../pagination.js';
 import { parseJsonFlag, kebabToCamel } from '../flag-utils.js';
+import { columns } from '../generated/columns.js';
 
 import { integration, integrationHasScopes, integrationTemplates, integrations } from '../generated/queries.js';
 import { integrationArchive, integrationAsksConnectChannel, integrationCustomerDataAttributesRefresh, integrationDelete, integrationDiscord, integrationFigma, integrationFront, integrationGitHubEnterpriseServerConnect, integrationGitHubPersonal, integrationGithubConnect, integrationGithubImportConnect, integrationGithubImportRefresh, integrationGitlabConnect, integrationGong, integrationGoogleCalendarPersonalConnect, integrationGoogleSheets, integrationLaunchDarklyConnect, integrationLaunchDarklyPersonalConnect, integrationLoom, integrationOpsgenieConnect, integrationOpsgenieRefreshScheduleMappings, integrationPagerDutyConnect, integrationPagerDutyRefreshScheduleMappings, integrationRequest, integrationSalesforce, integrationSalesforceMetadataRefresh, integrationSentryConnect, integrationSlack, integrationSlackAsks, integrationSlackCustomViewNotifications, integrationSlackCustomerChannelLink, integrationSlackImportEmojis, integrationSlackInitiativePost, integrationSlackOrAsksUpdateSlackTeamName, integrationSlackOrgInitiativeUpdatesPost, integrationSlackOrgProjectUpdatesPost, integrationSlackPersonal, integrationSlackPost, integrationSlackProjectPost, integrationUpdate, integrationZendesk } from '../generated/mutations.js';
@@ -22,7 +23,7 @@ export function builder(yargs) {
       const variables = {};
       variables.id = argv.id;
       const result = await request(integration, variables);
-      render(result.integration, { json: argv.json });
+      render(result.integration, { json: argv.json, columnConfig: columns['Integration'] });
     } catch (err) {
       handleError(err);
     }
@@ -39,7 +40,7 @@ export function builder(yargs) {
       if (argv['integration-id'] !== undefined) variables.integrationId = argv['integration-id'];
       if (argv['scopes'] !== undefined) variables.scopes = argv['scopes'];
       const result = await request(integrationHasScopes, variables);
-      render(result.integrationHasScopes, { json: argv.json });
+      render(result.integrationHasScopes, { json: argv.json, columnConfig: columns['IntegrationHasScopesPayload'] });
     } catch (err) {
       handleError(err);
     }
@@ -80,7 +81,7 @@ export function builder(yargs) {
         const result = await request(integrationTemplates, variables);
         data = result.integrationTemplates?.nodes || [];
       }
-      render(data, { json: argv.json, isList: true });
+      render(data, { json: argv.json, isList: true, columnConfig: columns['IntegrationTemplate'] });
     } catch (err) {
       handleError(err);
     }
@@ -121,7 +122,7 @@ export function builder(yargs) {
         const result = await request(integrations, variables);
         data = result.integrations?.nodes || [];
       }
-      render(data, { json: argv.json, isList: true });
+      render(data, { json: argv.json, isList: true, columnConfig: columns['Integration'] });
     } catch (err) {
       handleError(err);
     }

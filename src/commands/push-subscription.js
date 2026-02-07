@@ -4,6 +4,7 @@ import { handleError } from '../error.js';
 import { render } from '../output.js';
 import { fetchAllPages } from '../pagination.js';
 import { parseJsonFlag, kebabToCamel } from '../flag-utils.js';
+import { columns } from '../generated/columns.js';
 
 import { pushSubscriptionTest } from '../generated/queries.js';
 import { pushSubscriptionCreate, pushSubscriptionDelete } from '../generated/mutations.js';
@@ -24,7 +25,7 @@ export function builder(yargs) {
       if (argv['send-strategy'] !== undefined) variables.sendStrategy = argv['send-strategy'];
       if (argv['target-mobile'] !== undefined) variables.targetMobile = argv['target-mobile'];
       const result = await request(pushSubscriptionTest, variables);
-      render(result.pushSubscriptionTest, { json: argv.json });
+      render(result.pushSubscriptionTest, { json: argv.json, columnConfig: columns['PushSubscriptionTestPayload'] });
     } catch (err) {
       handleError(err);
     }

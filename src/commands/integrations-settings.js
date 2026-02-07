@@ -4,6 +4,7 @@ import { handleError } from '../error.js';
 import { render } from '../output.js';
 import { fetchAllPages } from '../pagination.js';
 import { parseJsonFlag, kebabToCamel } from '../flag-utils.js';
+import { columns } from '../generated/columns.js';
 
 import { integrationsSettings } from '../generated/queries.js';
 import { integrationsSettingsCreate, integrationsSettingsUpdate } from '../generated/mutations.js';
@@ -22,7 +23,7 @@ export function builder(yargs) {
       const variables = {};
       variables.id = argv.id;
       const result = await request(integrationsSettings, variables);
-      render(result.integrationsSettings, { json: argv.json });
+      render(result.integrationsSettings, { json: argv.json, columnConfig: columns['IntegrationsSettings'] });
     } catch (err) {
       handleError(err);
     }

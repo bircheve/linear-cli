@@ -4,6 +4,7 @@ import { handleError } from '../error.js';
 import { render } from '../output.js';
 import { fetchAllPages } from '../pagination.js';
 import { parseJsonFlag, kebabToCamel } from '../flag-utils.js';
+import { columns } from '../generated/columns.js';
 
 import { roadmap, roadmapToProjects, roadmaps } from '../generated/queries.js';
 import { roadmapArchive, roadmapCreate, roadmapDelete, roadmapUnarchive, roadmapUpdate } from '../generated/mutations.js';
@@ -22,7 +23,7 @@ export function builder(yargs) {
       const variables = {};
       variables.id = argv.id;
       const result = await request(roadmap, variables);
-      render(result.roadmap, { json: argv.json });
+      render(result.roadmap, { json: argv.json, columnConfig: columns['Roadmap'] });
     } catch (err) {
       handleError(err);
     }
@@ -63,7 +64,7 @@ export function builder(yargs) {
         const result = await request(roadmapToProjects, variables);
         data = result.roadmapToProjects?.nodes || [];
       }
-      render(data, { json: argv.json, isList: true });
+      render(data, { json: argv.json, isList: true, columnConfig: columns['RoadmapToProject'] });
     } catch (err) {
       handleError(err);
     }
@@ -104,7 +105,7 @@ export function builder(yargs) {
         const result = await request(roadmaps, variables);
         data = result.roadmaps?.nodes || [];
       }
-      render(data, { json: argv.json, isList: true });
+      render(data, { json: argv.json, isList: true, columnConfig: columns['Roadmap'] });
     } catch (err) {
       handleError(err);
     }

@@ -6,19 +6,37 @@ Covers **138 queries** and **307 mutations** across **81 resource groups** — 4
 
 ## Install
 
+**Homebrew** (recommended):
+
+```bash
+brew tap bircheve/linear-cli
+brew install linear-cli
+```
+
+**npm**:
+
 ```bash
 npm install -g linear-cli
-# or
-npx linear-cli
 ```
 
-## Authentication
+## Quick Start
 
 ```bash
-export LINEAR_API_KEY=lin_api_...
+linear setup          # paste your API key (from https://linear.app/settings/api)
+linear issue list     # you're in
 ```
 
-Get your API key from [Linear Settings > API](https://linear.app/settings/api).
+Your key is saved to `~/.config/linear-cli/config.json` (mode 600).
+
+### Authentication Commands
+
+```bash
+linear auth login     # save / update your API key
+linear auth logout    # remove saved key
+linear auth whoami    # show current user
+```
+
+Set `LINEAR_API_KEY` as an environment variable to override the stored key.
 
 ## Usage
 

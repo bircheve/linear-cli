@@ -4,6 +4,7 @@ import { handleError } from '../error.js';
 import { render } from '../output.js';
 import { fetchAllPages } from '../pagination.js';
 import { parseJsonFlag, kebabToCamel } from '../flag-utils.js';
+import { columns } from '../generated/columns.js';
 
 import { notification, notificationSubscriptions, notifications } from '../generated/queries.js';
 import { notificationArchive, notificationArchiveAll, notificationMarkReadAll, notificationMarkUnreadAll, notificationSnoozeAll, notificationUnarchive, notificationUnsnoozeAll, notificationUpdate } from '../generated/mutations.js';
@@ -22,7 +23,7 @@ export function builder(yargs) {
       const variables = {};
       variables.id = argv.id;
       const result = await request(notification, variables);
-      render(result.notification, { json: argv.json });
+      render(result.notification, { json: argv.json, columnConfig: columns['Notification'] });
     } catch (err) {
       handleError(err);
     }
@@ -63,7 +64,7 @@ export function builder(yargs) {
         const result = await request(notificationSubscriptions, variables);
         data = result.notificationSubscriptions?.nodes || [];
       }
-      render(data, { json: argv.json, isList: true });
+      render(data, { json: argv.json, isList: true, columnConfig: columns['NotificationSubscription'] });
     } catch (err) {
       handleError(err);
     }
@@ -108,7 +109,7 @@ export function builder(yargs) {
         const result = await request(notifications, variables);
         data = result.notifications?.nodes || [];
       }
-      render(data, { json: argv.json, isList: true });
+      render(data, { json: argv.json, isList: true, columnConfig: columns['Notification'] });
     } catch (err) {
       handleError(err);
     }

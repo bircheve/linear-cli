@@ -4,6 +4,7 @@ import { handleError } from '../error.js';
 import { render } from '../output.js';
 import { fetchAllPages } from '../pagination.js';
 import { parseJsonFlag, kebabToCamel } from '../flag-utils.js';
+import { columns } from '../generated/columns.js';
 
 import { initiativeUpdate as initiativeUpdateQuery } from '../generated/queries.js';
 import { initiativeUpdate as initiativeUpdateMutation, initiativeUpdateArchive, initiativeUpdateCreate, initiativeUpdateUnarchive, initiativeUpdateUpdate } from '../generated/mutations.js';
@@ -22,7 +23,7 @@ export function builder(yargs) {
       const variables = {};
       variables.id = argv.id;
       const result = await request(initiativeUpdateQuery, variables);
-      render(result.initiativeUpdate, { json: argv.json });
+      render(result.initiativeUpdate, { json: argv.json, columnConfig: columns['InitiativeUpdate'] });
     } catch (err) {
       handleError(err);
     }

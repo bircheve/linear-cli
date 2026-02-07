@@ -4,6 +4,7 @@ import { handleError } from '../error.js';
 import { render } from '../output.js';
 import { fetchAllPages } from '../pagination.js';
 import { parseJsonFlag, kebabToCamel } from '../flag-utils.js';
+import { columns } from '../generated/columns.js';
 
 import { emailIntakeAddress } from '../generated/queries.js';
 import { emailIntakeAddressCreate, emailIntakeAddressDelete, emailIntakeAddressRotate, emailIntakeAddressUpdate } from '../generated/mutations.js';
@@ -22,7 +23,7 @@ export function builder(yargs) {
       const variables = {};
       variables.id = argv.id;
       const result = await request(emailIntakeAddress, variables);
-      render(result.emailIntakeAddress, { json: argv.json });
+      render(result.emailIntakeAddress, { json: argv.json, columnConfig: columns['EmailIntakeAddress'] });
     } catch (err) {
       handleError(err);
     }

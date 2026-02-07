@@ -4,6 +4,7 @@ import { handleError } from '../error.js';
 import { render } from '../output.js';
 import { fetchAllPages } from '../pagination.js';
 import { parseJsonFlag, kebabToCamel } from '../flag-utils.js';
+import { columns } from '../generated/columns.js';
 
 import { customView, customViewDetailsSuggestion, customViews } from '../generated/queries.js';
 import { customViewCreate, customViewDelete, customViewUpdate } from '../generated/mutations.js';
@@ -22,7 +23,7 @@ export function builder(yargs) {
       const variables = {};
       variables.id = argv.id;
       const result = await request(customView, variables);
-      render(result.customView, { json: argv.json });
+      render(result.customView, { json: argv.json, columnConfig: columns['CustomView'] });
     } catch (err) {
       handleError(err);
     }
@@ -40,7 +41,7 @@ export function builder(yargs) {
       if (argv['filter'] !== undefined) variables.filter = argv['filter'];
       if (argv['model-name'] !== undefined) variables.modelName = argv['model-name'];
       const result = await request(customViewDetailsSuggestion, variables);
-      render(result.customViewDetailsSuggestion, { json: argv.json });
+      render(result.customViewDetailsSuggestion, { json: argv.json, columnConfig: columns['CustomViewSuggestionPayload'] });
     } catch (err) {
       handleError(err);
     }
@@ -87,7 +88,7 @@ export function builder(yargs) {
         const result = await request(customViews, variables);
         data = result.customViews?.nodes || [];
       }
-      render(data, { json: argv.json, isList: true });
+      render(data, { json: argv.json, isList: true, columnConfig: columns['CustomView'] });
     } catch (err) {
       handleError(err);
     }

@@ -4,6 +4,7 @@ import { handleError } from '../error.js';
 import { render } from '../output.js';
 import { fetchAllPages } from '../pagination.js';
 import { parseJsonFlag, kebabToCamel } from '../flag-utils.js';
+import { columns } from '../generated/columns.js';
 
 import { timeSchedule, timeSchedules } from '../generated/queries.js';
 import { timeScheduleCreate, timeScheduleDelete, timeScheduleRefreshIntegrationSchedule, timeScheduleUpdate, timeScheduleUpsertExternal } from '../generated/mutations.js';
@@ -22,7 +23,7 @@ export function builder(yargs) {
       const variables = {};
       variables.id = argv.id;
       const result = await request(timeSchedule, variables);
-      render(result.timeSchedule, { json: argv.json });
+      render(result.timeSchedule, { json: argv.json, columnConfig: columns['TimeSchedule'] });
     } catch (err) {
       handleError(err);
     }
@@ -63,7 +64,7 @@ export function builder(yargs) {
         const result = await request(timeSchedules, variables);
         data = result.timeSchedules?.nodes || [];
       }
-      render(data, { json: argv.json, isList: true });
+      render(data, { json: argv.json, isList: true, columnConfig: columns['TimeSchedule'] });
     } catch (err) {
       handleError(err);
     }

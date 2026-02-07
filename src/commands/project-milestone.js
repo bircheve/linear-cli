@@ -4,6 +4,7 @@ import { handleError } from '../error.js';
 import { render } from '../output.js';
 import { fetchAllPages } from '../pagination.js';
 import { parseJsonFlag, kebabToCamel } from '../flag-utils.js';
+import { columns } from '../generated/columns.js';
 
 import { projectMilestone } from '../generated/queries.js';
 import { projectMilestoneCreate, projectMilestoneDelete, projectMilestoneMove, projectMilestoneUpdate } from '../generated/mutations.js';
@@ -22,7 +23,7 @@ export function builder(yargs) {
       const variables = {};
       variables.id = argv.id;
       const result = await request(projectMilestone, variables);
-      render(result.projectMilestone, { json: argv.json });
+      render(result.projectMilestone, { json: argv.json, columnConfig: columns['ProjectMilestone'] });
     } catch (err) {
       handleError(err);
     }

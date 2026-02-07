@@ -4,6 +4,7 @@ import { handleError } from '../error.js';
 import { render } from '../output.js';
 import { fetchAllPages } from '../pagination.js';
 import { parseJsonFlag, kebabToCamel } from '../flag-utils.js';
+import { columns } from '../generated/columns.js';
 
 import { cycle, cycles } from '../generated/queries.js';
 import { cycleArchive, cycleCreate, cycleShiftAll, cycleStartUpcomingCycleToday, cycleUpdate } from '../generated/mutations.js';
@@ -22,7 +23,7 @@ export function builder(yargs) {
       const variables = {};
       variables.id = argv.id;
       const result = await request(cycle, variables);
-      render(result.cycle, { json: argv.json });
+      render(result.cycle, { json: argv.json, columnConfig: columns['Cycle'] });
     } catch (err) {
       handleError(err);
     }
@@ -67,7 +68,7 @@ export function builder(yargs) {
         const result = await request(cycles, variables);
         data = result.cycles?.nodes || [];
       }
-      render(data, { json: argv.json, isList: true });
+      render(data, { json: argv.json, isList: true, columnConfig: columns['Cycle'] });
     } catch (err) {
       handleError(err);
     }

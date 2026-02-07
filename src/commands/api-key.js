@@ -4,6 +4,7 @@ import { handleError } from '../error.js';
 import { render } from '../output.js';
 import { fetchAllPages } from '../pagination.js';
 import { parseJsonFlag, kebabToCamel } from '../flag-utils.js';
+import { columns } from '../generated/columns.js';
 
 import { apiKeys } from '../generated/queries.js';
 import { apiKeyCreate, apiKeyDelete, apiKeyUpdate } from '../generated/mutations.js';
@@ -48,7 +49,7 @@ export function builder(yargs) {
         const result = await request(apiKeys, variables);
         data = result.apiKeys?.nodes || [];
       }
-      render(data, { json: argv.json, isList: true });
+      render(data, { json: argv.json, isList: true, columnConfig: columns['ApiKey'] });
     } catch (err) {
       handleError(err);
     }

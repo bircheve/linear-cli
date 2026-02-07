@@ -4,6 +4,7 @@ import { handleError } from '../error.js';
 import { render } from '../output.js';
 import { fetchAllPages } from '../pagination.js';
 import { parseJsonFlag, kebabToCamel } from '../flag-utils.js';
+import { columns } from '../generated/columns.js';
 
 import { organization, organizationExists, organizationInvites, organizationMeta } from '../generated/queries.js';
 import { createOrganizationFromOnboarding, joinOrganizationFromOnboarding, leaveOrganization, organizationDelete, organizationDeleteChallenge, organizationStartTrial, organizationStartTrialForPlan, organizationUpdate } from '../generated/mutations.js';
@@ -20,7 +21,7 @@ export function builder(yargs) {
     try {
       const variables = {};
       const result = await request(organization, variables);
-      render(result.organization, { json: argv.json });
+      render(result.organization, { json: argv.json, columnConfig: columns['Organization'] });
     } catch (err) {
       handleError(err);
     }
@@ -35,7 +36,7 @@ export function builder(yargs) {
       const variables = {};
       if (argv['url-key'] !== undefined) variables.urlKey = argv['url-key'];
       const result = await request(organizationExists, variables);
-      render(result.organizationExists, { json: argv.json });
+      render(result.organizationExists, { json: argv.json, columnConfig: columns['OrganizationExistsPayload'] });
     } catch (err) {
       handleError(err);
     }
@@ -76,7 +77,7 @@ export function builder(yargs) {
         const result = await request(organizationInvites, variables);
         data = result.organizationInvites?.nodes || [];
       }
-      render(data, { json: argv.json, isList: true });
+      render(data, { json: argv.json, isList: true, columnConfig: columns['OrganizationInvite'] });
     } catch (err) {
       handleError(err);
     }
@@ -91,7 +92,7 @@ export function builder(yargs) {
       const variables = {};
       if (argv['url-key'] !== undefined) variables.urlKey = argv['url-key'];
       const result = await request(organizationMeta, variables);
-      render(result.organizationMeta, { json: argv.json });
+      render(result.organizationMeta, { json: argv.json, columnConfig: columns['OrganizationMeta'] });
     } catch (err) {
       handleError(err);
     }

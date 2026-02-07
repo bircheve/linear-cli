@@ -4,6 +4,7 @@ import { handleError } from '../error.js';
 import { render } from '../output.js';
 import { fetchAllPages } from '../pagination.js';
 import { parseJsonFlag, kebabToCamel } from '../flag-utils.js';
+import { columns } from '../generated/columns.js';
 
 import { teamMembership } from '../generated/queries.js';
 import { teamMembershipCreate, teamMembershipDelete, teamMembershipUpdate } from '../generated/mutations.js';
@@ -22,7 +23,7 @@ export function builder(yargs) {
       const variables = {};
       variables.id = argv.id;
       const result = await request(teamMembership, variables);
-      render(result.teamMembership, { json: argv.json });
+      render(result.teamMembership, { json: argv.json, columnConfig: columns['TeamMembership'] });
     } catch (err) {
       handleError(err);
     }

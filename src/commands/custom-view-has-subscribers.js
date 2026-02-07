@@ -4,6 +4,7 @@ import { handleError } from '../error.js';
 import { render } from '../output.js';
 import { fetchAllPages } from '../pagination.js';
 import { parseJsonFlag, kebabToCamel } from '../flag-utils.js';
+import { columns } from '../generated/columns.js';
 
 import { customViewHasSubscribers } from '../generated/queries.js';
 
@@ -21,7 +22,7 @@ export function builder(yargs) {
       const variables = {};
       variables.id = argv.id;
       const result = await request(customViewHasSubscribers, variables);
-      render(result.customViewHasSubscribers, { json: argv.json });
+      render(result.customViewHasSubscribers, { json: argv.json, columnConfig: columns['CustomViewHasSubscribersPayload'] });
     } catch (err) {
       handleError(err);
     }
