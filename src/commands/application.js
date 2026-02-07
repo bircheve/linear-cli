@@ -37,7 +37,7 @@ export function builder(yargs) {
       const variables = {};
       if (argv['ids'] !== undefined) variables.ids = argv['ids'];
       const result = await request(applicationInfoByIds, variables);
-      render(result.applicationInfoByIds, { json: argv.json, columnConfig: columns['Application'] });
+      render(result.applicationInfoByIds, { json: argv.json, isList: true, columnConfig: columns['Application'] });
     } catch (err) {
       handleError(err);
     }

@@ -36,7 +36,7 @@ export function builder(yargs) {
     try {
       const variables = {};
       const result = await request(templates, variables);
-      render(result.templates, { json: argv.json, columnConfig: columns['Template'] });
+      render(result.templates, { json: argv.json, isList: true, columnConfig: columns['Template'] });
     } catch (err) {
       handleError(err);
     }

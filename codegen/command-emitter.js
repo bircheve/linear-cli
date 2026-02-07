@@ -3,6 +3,7 @@ import { join, dirname } from 'node:path';
 import { gqlTypeToYargsType, camelToKebab, isConnectionType, getNodeTypeFromConnection } from './type-utils.js';
 
 const AUTO_GENERATED_HEADER = '// AUTO-GENERATED';
+const PAGINATION_ARGS = new Set(['first', 'after', 'last', 'before']);
 
 export function emitCommands(groups, ir, outputDir) {
   mkdirSync(outputDir, { recursive: true });
@@ -114,7 +115,8 @@ function generateGroupFile(group, ir) {
 
 function generateSubcommand(cmd, ir, localName) {
   const isQuery = cmd.source === 'query';
-  const isList = isQuery && isConnectionType(cmd.typeName);
+  const isConnection = isQuery && isConnectionType(cmd.typeName);
+  const isArrayReturn = isQuery && !isConnection && cmd.isList;
   const lines = [];
 
   // Determine positional args (usually 'id')
@@ -122,7 +124,7 @@ function generateSubcommand(cmd, ir, localName) {
   const optionArgs = [];
 
   for (const arg of cmd.args) {
-    if (arg.name === 'id' && arg.required && !isList) {
+    if (arg.name === 'id' && arg.required && !isConnection) {
       positionals.push(arg);
     } else {
       optionArgs.push(arg);
@@ -166,6 +168,7 @@ function generateSubcommand(cmd, ir, localName) {
   // Add direct args as flags (skip 'id' positionals and 'input')
   for (const arg of optionArgs) {
     if (inputType && arg.name === 'input') continue;
+    if (isConnection && PAGINATION_ARGS.has(arg.name)) continue;
     const flagName = camelToKebab(arg.name);
     const yargsType = gqlTypeToYargsType(arg.typeName, arg.isList, ir.enums);
     let optDef = `{ type: '${yargsType.type}'`;
@@ -177,7 +180,7 @@ function generateSubcommand(cmd, ir, localName) {
   }
 
   // List commands get pagination flags
-  if (isList) {
+  if (isConnection) {
     lines.push("  yargs.option('first', { type: 'number', default: 50, describe: 'Number of results to fetch' });");
     lines.push("  yargs.option('after', { type: 'string', describe: 'Cursor for forward pagination' });");
     lines.push("  yargs.option('last', { type: 'number', describe: 'Number of results to fetch from the end' });");
@@ -201,10 +204,11 @@ function generateSubcommand(cmd, ir, localName) {
   lines.push('}, async (argv) => {');
   lines.push('  try {');
 
-  if (isList) {
-    // List handler
+  if (isConnection) {
+    // Connection list handler
     lines.push('    const variables = {};');
     for (const arg of cmd.args) {
+      if (PAGINATION_ARGS.has(arg.name)) continue;
       const camel = arg.name;
       lines.push(`    if (argv['${camelToKebab(camel)}'] !== undefined) variables.${camel} = argv['${camelToKebab(camel)}'];`);
     }
@@ -226,6 +230,18 @@ function generateSubcommand(cmd, ir, localName) {
     lines.push('    }');
     const nodeType = getNodeTypeFromConnection(cmd.typeName);
     lines.push(`    render(data, { json: argv.json, isList: true, columnConfig: columns['${nodeType}'] });`);
+  } else if (isArrayReturn) {
+    // Array return handler (non-connection list)
+    lines.push('    const variables = {};');
+    for (const p of positionals) {
+      lines.push(`    variables.${p.name} = argv.${p.name};`);
+    }
+    for (const arg of optionArgs) {
+      const camel = arg.name;
+      lines.push(`    if (argv['${camelToKebab(camel)}'] !== undefined) variables.${camel} = argv['${camelToKebab(camel)}'];`);
+    }
+    lines.push(`    const result = await request(${localName}, variables);`);
+    lines.push(`    render(result.${cmd.name}, { json: argv.json, isList: true, columnConfig: columns['${cmd.typeName}'] });`);
   } else if (isQuery) {
     // Get/single query handler
     lines.push('    const variables = {};');

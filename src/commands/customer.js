@@ -31,12 +31,8 @@ export function builder(yargs) {
 
   // query: customerNeeds
   yargs.command('needs', 'All customer needs.', (yargs) => {
-    yargs.option('after', { type: 'string', describe: 'A cursor to be used with first for forward pagination' });
-    yargs.option('before', { type: 'string', describe: 'A cursor to be used with last for backward pagination.' });
     yargs.option('filter', { type: 'string', describe: 'Filter returned customers needs.' });
-    yargs.option('first', { type: 'number', describe: 'The number of items to forward paginate (used with after). Defaults to 50.' });
     yargs.option('include-archived', { type: 'boolean', describe: 'Should archived resources be included (default: false)' });
-    yargs.option('last', { type: 'number', describe: 'The number of items to backward paginate (used with before). Defaults to 50.' });
     yargs.option('order-by', { type: 'string', choices: ["createdAt","updatedAt"], describe: 'By which field should the pagination order by. Available options are createdA...' });
     yargs.option('first', { type: 'number', default: 50, describe: 'Number of results to fetch' });
     yargs.option('after', { type: 'string', describe: 'Cursor for forward pagination' });
@@ -48,12 +44,8 @@ export function builder(yargs) {
   }, async (argv) => {
     try {
       const variables = {};
-      if (argv['after'] !== undefined) variables.after = argv['after'];
-      if (argv['before'] !== undefined) variables.before = argv['before'];
       if (argv['filter'] !== undefined) variables.filter = argv['filter'];
-      if (argv['first'] !== undefined) variables.first = argv['first'];
       if (argv['include-archived'] !== undefined) variables.includeArchived = argv['include-archived'];
-      if (argv['last'] !== undefined) variables.last = argv['last'];
       if (argv['order-by'] !== undefined) variables.orderBy = argv['order-by'];
       if (argv['filter-json']) variables.filter = parseJsonFlag(argv['filter-json']);
       if (argv.first !== undefined) variables.first = argv.first;
@@ -76,11 +68,7 @@ export function builder(yargs) {
 
   // query: customerStatuses
   yargs.command('statuses', 'All customer statuses.', (yargs) => {
-    yargs.option('after', { type: 'string', describe: 'A cursor to be used with first for forward pagination' });
-    yargs.option('before', { type: 'string', describe: 'A cursor to be used with last for backward pagination.' });
-    yargs.option('first', { type: 'number', describe: 'The number of items to forward paginate (used with after). Defaults to 50.' });
     yargs.option('include-archived', { type: 'boolean', describe: 'Should archived resources be included (default: false)' });
-    yargs.option('last', { type: 'number', describe: 'The number of items to backward paginate (used with before). Defaults to 50.' });
     yargs.option('order-by', { type: 'string', choices: ["createdAt","updatedAt"], describe: 'By which field should the pagination order by. Available options are createdA...' });
     yargs.option('first', { type: 'number', default: 50, describe: 'Number of results to fetch' });
     yargs.option('after', { type: 'string', describe: 'Cursor for forward pagination' });
@@ -91,11 +79,7 @@ export function builder(yargs) {
   }, async (argv) => {
     try {
       const variables = {};
-      if (argv['after'] !== undefined) variables.after = argv['after'];
-      if (argv['before'] !== undefined) variables.before = argv['before'];
-      if (argv['first'] !== undefined) variables.first = argv['first'];
       if (argv['include-archived'] !== undefined) variables.includeArchived = argv['include-archived'];
-      if (argv['last'] !== undefined) variables.last = argv['last'];
       if (argv['order-by'] !== undefined) variables.orderBy = argv['order-by'];
       if (argv.first !== undefined) variables.first = argv.first;
       if (argv.after) variables.after = argv.after;
@@ -117,11 +101,7 @@ export function builder(yargs) {
 
   // query: customerTiers
   yargs.command('tiers', 'All customer tiers.', (yargs) => {
-    yargs.option('after', { type: 'string', describe: 'A cursor to be used with first for forward pagination' });
-    yargs.option('before', { type: 'string', describe: 'A cursor to be used with last for backward pagination.' });
-    yargs.option('first', { type: 'number', describe: 'The number of items to forward paginate (used with after). Defaults to 50.' });
     yargs.option('include-archived', { type: 'boolean', describe: 'Should archived resources be included (default: false)' });
-    yargs.option('last', { type: 'number', describe: 'The number of items to backward paginate (used with before). Defaults to 50.' });
     yargs.option('order-by', { type: 'string', choices: ["createdAt","updatedAt"], describe: 'By which field should the pagination order by. Available options are createdA...' });
     yargs.option('first', { type: 'number', default: 50, describe: 'Number of results to fetch' });
     yargs.option('after', { type: 'string', describe: 'Cursor for forward pagination' });
@@ -132,11 +112,7 @@ export function builder(yargs) {
   }, async (argv) => {
     try {
       const variables = {};
-      if (argv['after'] !== undefined) variables.after = argv['after'];
-      if (argv['before'] !== undefined) variables.before = argv['before'];
-      if (argv['first'] !== undefined) variables.first = argv['first'];
       if (argv['include-archived'] !== undefined) variables.includeArchived = argv['include-archived'];
-      if (argv['last'] !== undefined) variables.last = argv['last'];
       if (argv['order-by'] !== undefined) variables.orderBy = argv['order-by'];
       if (argv.first !== undefined) variables.first = argv.first;
       if (argv.after) variables.after = argv.after;
@@ -158,12 +134,8 @@ export function builder(yargs) {
 
   // query: customers
   yargs.command('list', 'All customers.', (yargs) => {
-    yargs.option('after', { type: 'string', describe: 'A cursor to be used with first for forward pagination' });
-    yargs.option('before', { type: 'string', describe: 'A cursor to be used with last for backward pagination.' });
     yargs.option('filter', { type: 'string', describe: 'Filter returned customers.' });
-    yargs.option('first', { type: 'number', describe: 'The number of items to forward paginate (used with after). Defaults to 50.' });
     yargs.option('include-archived', { type: 'boolean', describe: 'Should archived resources be included (default: false)' });
-    yargs.option('last', { type: 'number', describe: 'The number of items to backward paginate (used with before). Defaults to 50.' });
     yargs.option('order-by', { type: 'string', choices: ["createdAt","updatedAt"], describe: 'By which field should the pagination order by. Available options are createdA...' });
     yargs.option('sorts', { type: 'array', describe: 'Sort returned customers.' });
     yargs.option('first', { type: 'number', default: 50, describe: 'Number of results to fetch' });
@@ -176,12 +148,8 @@ export function builder(yargs) {
   }, async (argv) => {
     try {
       const variables = {};
-      if (argv['after'] !== undefined) variables.after = argv['after'];
-      if (argv['before'] !== undefined) variables.before = argv['before'];
       if (argv['filter'] !== undefined) variables.filter = argv['filter'];
-      if (argv['first'] !== undefined) variables.first = argv['first'];
       if (argv['include-archived'] !== undefined) variables.includeArchived = argv['include-archived'];
-      if (argv['last'] !== undefined) variables.last = argv['last'];
       if (argv['order-by'] !== undefined) variables.orderBy = argv['order-by'];
       if (argv['sorts'] !== undefined) variables.sorts = argv['sorts'];
       if (argv['filter-json']) variables.filter = parseJsonFlag(argv['filter-json']);
