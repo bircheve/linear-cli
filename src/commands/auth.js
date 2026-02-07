@@ -1,5 +1,5 @@
 // Hand-written — not auto-generated. Manages CLI API key authentication.
-import { getApiKey, saveApiKey, clearApiKey, getStoredKey, CONFIG_FILE } from '../auth.js';
+import { getApiKey, saveApiKey, clearApiKey, validateKey, getStoredKey, CONFIG_FILE } from '../auth.js';
 import { request } from '../client.js';
 import { handleError } from '../error.js';
 import { render } from '../output.js';
@@ -10,7 +10,7 @@ const viewerQuery = /* GraphQL */ `query { viewer { id name email displayName ac
 function promptForKey() {
   return new Promise((resolve, reject) => {
     const rl = createInterface({ input: process.stdin, output: process.stderr });
-    rl.question('? Paste your Linear API key (from https://linear.app/settings/api): ', (answer) => {
+    rl.question('Paste your Linear API key (from https://linear.app/settings/api): ', (answer) => {
       rl.close();
       resolve(answer.trim());
     });
@@ -24,8 +24,9 @@ export const describe = 'Manage API key authentication';
 export function builder(yargs) {
   yargs.command('login', 'Save your Linear API key', () => {}, async (argv) => {
     try {
+      console.error('Get your API key from: https://linear.app/settings/api\n');
       const key = await promptForKey();
-      if (!key.startsWith('lin_api_')) {
+      if (!validateKey(key)) {
         console.error('Error: API key must start with "lin_api_".');
         process.exit(2);
       }
@@ -47,14 +48,12 @@ export function builder(yargs) {
 
   yargs.command('whoami', 'Show the currently authenticated user', () => {}, async (argv) => {
     try {
-      // Ensure we have a key (env or stored) without triggering interactive prompt
       const envKey = process.env.LINEAR_API_KEY;
       const storedKey = getStoredKey();
       if (!envKey && !storedKey) {
-        console.error('Not logged in. Run `linear auth login` to configure your API key.');
+        console.error('Not logged in. Run `linear setup` to configure your API key.');
         process.exit(2);
       }
-      // Trigger normal auth flow (will use env or stored key)
       await getApiKey();
       const result = await request(viewerQuery);
       render(result.viewer, { json: argv.json });

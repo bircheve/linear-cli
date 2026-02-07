@@ -57,7 +57,7 @@ describe('CLI integration', () => {
     expect(stdout).toContain('--all');
   });
 
-  it('no API key exits with code 2 in non-TTY', async () => {
+  it('no API key exits with code 2', async () => {
     // Use a temp HOME so no stored config is found
     const fakeHome = mkdtempSync(join(tmpdir(), 'linear-cli-test-'));
     const env = { ...process.env, HOME: fakeHome };
@@ -65,6 +65,13 @@ describe('CLI integration', () => {
     const { code, stderr } = await run(['issue', 'list'], { env });
     expect(code).toBe(2);
     expect(stderr).toContain('No API key found');
+    expect(stderr).toContain('linear setup');
+  });
+
+  it('setup --help shows description', async () => {
+    const { code, stdout } = await run(['setup', '--help']);
+    expect(code).toBe(0);
+    expect(stdout).toContain('Configure your Linear API key');
   });
 
   it('auth --help lists subcommands', async () => {

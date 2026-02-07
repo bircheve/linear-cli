@@ -40,12 +40,19 @@ describe('auth', () => {
     expect(exitCode).toBe(2);
   });
 
-  it('exits 2 when no key and non-TTY', async () => {
+  it('exits 2 when no key found', async () => {
     delete process.env.LINEAR_API_KEY;
-    // stdin.isTTY is undefined in test environment (non-TTY), so it should exit
     const mod = await import('../../src/auth.js?missing=' + Date.now());
     await expect(mod.getApiKey()).rejects.toThrow('exit:2');
     expect(exitCode).toBe(2);
+  });
+
+  it('validateKey accepts valid keys and rejects invalid ones', async () => {
+    const { validateKey } = await import('../../src/auth.js?validate=' + Date.now());
+    expect(validateKey('lin_api_test12345')).toBe(true);
+    expect(validateKey('wrong_prefix')).toBe(false);
+    expect(validateKey('')).toBe(false);
+    expect(validateKey(null)).toBe(false);
   });
 
   it('saveApiKey writes config file', async () => {
