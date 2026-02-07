@@ -50,7 +50,6 @@ export const administrableTeams = /* GraphQL */ `query administrableTeams($after
     joinByDefault
     key
     markedAsDuplicateWorkflowState { id name }
-    membership { id }
     mergeWorkflowState { id name }
     mergeableWorkflowState { id name }
     name
@@ -276,7 +275,6 @@ export const archivedTeams = /* GraphQL */ `query archivedTeams {
     joinByDefault
     key
     markedAsDuplicateWorkflowState { id name }
-    membership { id }
     mergeWorkflowState { id name }
     mergeableWorkflowState { id name }
     name
@@ -2689,7 +2687,6 @@ export const team = /* GraphQL */ `query team($id: String!) {
     joinByDefault
     key
     markedAsDuplicateWorkflowState { id name }
-    membership { id }
     mergeWorkflowState { id name }
     mergeableWorkflowState { id name }
     name
@@ -2800,7 +2797,6 @@ export const teams = /* GraphQL */ `query teams($after: String, $before: String,
     joinByDefault
     key
     markedAsDuplicateWorkflowState { id name }
-    membership { id }
     mergeWorkflowState { id name }
     mergeableWorkflowState { id name }
     name

@@ -110,11 +110,16 @@ function extractObjectTypes(schema) {
       const fields = {};
       for (const [fieldName, field] of Object.entries(type.getFields())) {
         const u = unwrapType(field.type);
+        const args = (field.args || []).map(arg => {
+          const a = unwrapType(arg.type);
+          return { name: arg.name, typeName: a.typeName, required: a.required };
+        });
         fields[fieldName] = {
           typeName: u.typeName,
           required: u.required,
           isList: u.isList,
           description: field.description || '',
+          args,
         };
       }
       objects[name] = {

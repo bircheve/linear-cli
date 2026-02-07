@@ -22,6 +22,7 @@ function buildSelectionSet(objectType, objectTypes, depth = 0) {
 
   for (const [fieldName, field] of Object.entries(objectType.fields)) {
     if (SKIP_FIELDS.has(fieldName)) continue;
+    if (field.args && field.args.some(a => a.required)) continue;
 
     const typeName = field.typeName;
 
@@ -169,6 +170,7 @@ function buildPayloadSelection(objectType, objectTypes) {
     const typeName = field.typeName;
 
     if (isConnectionType(typeName)) continue;
+    if (field.args && field.args.some(a => a.required)) continue;
 
     if (isScalar(typeName)) {
       lines.push(fieldName);
